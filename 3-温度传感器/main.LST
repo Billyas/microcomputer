@@ -1,0 +1,135 @@
+C51 COMPILER V9.01   MAIN                                                                  12/02/2021 23:34:06 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Program Files (x86)\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #include "intrins.h"
+   3          #define uchar   unsigned char
+   4          #define uint    unsigned int
+   5          #define out             P0
+   6          sbit    smg1 = out^4;
+   7          sbit    smg2 = out^5;
+   8          sbit    DQ   = P3^7;
+   9          uchar a[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+  10          
+  11          void delay5(uchar);
+  12          void init_ds18b20(void);
+  13          uchar readbyte(void);
+  14          void writebyte(uchar);
+  15          uchar retemp(void);
+  16          
+  17          void main(void)
+  18          {
+  19   1              uchar i, temp;
+  20   1              delay5(1000);
+  21   1              while(1)
+  22   1              {
+  23   2                      temp = retemp();
+  24   2                      for(i=0; i<10; i++)
+  25   2                      {
+  26   3                              //out = (temp/10)&0x0f;
+  27   3                              out = a[(temp/10)&0x0f];
+  28   3                              smg1 = 0;
+  29   3                              smg2 = 1;
+  30   3                              delay5(1000);
+  31   3                              //out = (temp%10)&0x0f;
+  32   3                              out = a[(temp%10)&0x0f];
+  33   3                              smg1 = 1;
+  34   3                              smg2 = 0;
+  35   3                              delay5(1000);
+  36   3                      }
+  37   2              }
+  38   1              
+  39   1      }
+  40          
+  41          void delay5(uchar n)  //5us
+  42          {
+  43   1              do{
+  44   2                      _nop_();
+  45   2                      _nop_();
+  46   2                      _nop_();
+  47   2                      n--;
+  48   2              }while(n);
+  49   1      }
+  50          
+  51          void init_ds18b20(void)
+  52          {
+  53   1              uchar x = 0; 
+  54   1              DQ = 0;
+  55   1              delay5(120);
+C51 COMPILER V9.01   MAIN                                                                  12/02/2021 23:34:06 PAGE 2   
+
+  56   1              DQ = 1;
+  57   1              delay5(16);
+  58   1              delay5(80);
+  59   1      }
+  60          
+  61          uchar readbyte(void)
+  62          {
+  63   1              uchar i = 0;
+  64   1              uchar date = 0;
+  65   1              for(i = 8; i > 0; i--)
+  66   1              {
+  67   2                      DQ = 0;
+  68   2                      delay5(1);
+  69   2                      DQ = 1;
+  70   2                      date >>= 1;
+  71   2                      if(DQ)  date |= 0x80;
+  72   2                      delay5(11);
+  73   2              }
+  74   1              return (date);
+  75   1      }
+  76          
+  77          void writebyte(uchar dat)
+  78          {
+  79   1              uchar i=0;
+  80   1              for(i=8; i>0; i--)
+  81   1              {
+  82   2                      DQ = 0;
+  83   2                      DQ = dat&0x01;
+  84   2                      delay5(12);
+  85   2                      DQ = 1;
+  86   2                      dat >>=1;
+  87   2                      delay5(5);
+  88   2              }
+  89   1      }
+  90          
+  91          uchar retemp(void)
+  92          {
+  93   1              uchar a,b,tt;
+  94   1              uint t;
+  95   1              init_ds18b20();
+  96   1              writebyte(0xCC);  //跳过读取序列，即直接单个设备
+  97   1              writebyte(0x44);  //启动温度转换
+  98   1              init_ds18b20();
+  99   1              writebyte(0xCC);
+ 100   1              writebyte(0xBE);  //读取温度
+ 101   1              a = readbyte();
+ 102   1              b = readbyte();
+ 103   1              t = b;
+ 104   1              t <<= 8;
+ 105   1              t = t|a;
+ 106   1              tt = t*0.0625;
+ 107   1              return (tt); 
+ 108   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    222    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       3
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   MAIN                                                                  12/02/2021 23:34:06 PAGE 3   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
