@@ -1,0 +1,22 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\学习\微机接口\4-LCD1602\4-LCD.uvproj
+Project File Date:  12/03/2021
+
+<h2>Output:</h2>
+compiling a.c...
+a.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=27.0 xdata=0 code=403
+creating hex file from "4-LCD"...
+"4-LCD" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling a.c...
+linking...
+Program Size: data=27.0 xdata=0 code=403
+creating hex file from "4-LCD"...
+"4-LCD" - 0 Error(s), 0 Warning(s).
