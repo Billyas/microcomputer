@@ -1,0 +1,282 @@
+C51 COMPILER V9.01   A                                                                     12/10/2021 18:13:50 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE A
+OBJECT MODULE PLACED IN a.OBJ
+COMPILER INVOKED BY: C:\Program Files (x86)\Keil\C51\BIN\C51.EXE a.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #include "intrins.h"
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          #define out P2
+   6          #define SMG_PORT P0
+   7          
+   8          sbit scl = P2^1;
+   9          sbit sda = P2^0;
+  10          sbit key1 = P3^2;
+  11          sbit key2 = P3^3;
+  12          
+  13          sbit LSA = P2^2;
+  14          sbit LSB = P2^3;
+  15          sbit LSC = P2^4;
+  16          
+  17          
+  18          uchar data mem[4]_at_ 0x55;
+  19          uchar mem[4] = {21, 12, 10, 90};
+  20          uchar data rec_mem[4] _at_ 0x60;
+  21          uchar rec_mem[4] = {0x00, 0x00, 0x00, 0x00};
+  22          uchar gsmg_code[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  23                                          0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
+  24          
+  25          
+  26          void start(void);
+  27          void stop(void);
+  28          void sack(void);
+  29          bit rack(void);
+  30          void ackn(void);
+  31          void send_byte(uchar);
+  32          uchar rec_byte();
+  33          void write(void);
+  34          void read(void);
+  35          void delay4us(void);
+  36          void show(void);
+  37          void smg_display(uchar dat[], uchar pos);
+  38          
+  39          void main(void)
+  40          {
+  41   1              EA=1;EX0=1;EX1=1;
+  42   1              while(1)
+  43   1              {
+  44   2                  show();
+  45   2              }
+  46   1      }
+  47          
+  48          void ext0()interrupt 0
+  49          {
+  50   1              write();
+  51   1      }
+  52          
+  53          void ext1()interrupt 2
+  54          {
+  55   1              read();
+C51 COMPILER V9.01   A                                                                     12/10/2021 18:13:50 PAGE 2   
+
+  56   1              show();
+  57   1      }
+  58          
+  59          void read(void)
+  60          {
+  61   1              uchar i;
+  62   1              bit f;
+  63   1              start();
+  64   1              send_byte(0xa0);
+  65   1              f = rack();
+  66   1              if(!f)
+  67   1              {
+  68   2                      start();
+  69   2                      send_byte(0xa0);
+  70   2                      f = rack();
+  71   2                      send_byte(0x00);
+  72   2                      f = rack();
+  73   2              }
+  74   1              if(!f)
+  75   1              {
+  76   2                      start();
+  77   2                      send_byte(0xa1);
+  78   2                      f = rack();
+  79   2              }
+  80   1              if(!f)
+  81   1              {
+  82   2                      for(i=0; i<3; i++)
+  83   2                      {
+  84   3                              rec_mem[i] = rec_byte();
+  85   3                              sack();
+  86   3                      }
+  87   2                      rec_mem[3] = rec_byte();
+  88   2                      ackn();
+  89   2              }
+  90   1              stop();
+  91   1              out = rec_mem[3];
+  92   1              while(!key2);
+  93   1      
+  94   1      }
+  95          
+  96          
+  97          void write(void)
+  98          {
+  99   1              uchar i;
+ 100   1              bit f;
+ 101   1              start();
+ 102   1              send_byte(0xa0);
+ 103   1              f = rack();
+ 104   1              if(!f)
+ 105   1              {
+ 106   2                      send_byte(0x00);
+ 107   2                      f = rack();
+ 108   2                      if(!f)
+ 109   2                      {
+ 110   3                              for(i=0; i<4; i++)                                                                                       
+ 111   3                              {
+ 112   4                                      send_byte(mem[i]);
+ 113   4                                      f = rack();
+ 114   4                                      if(f) break;
+ 115   4                              }
+ 116   3                      }
+ 117   2              }
+C51 COMPILER V9.01   A                                                                     12/10/2021 18:13:50 PAGE 3   
+
+ 118   1              stop();
+ 119   1              out = 0xc3;
+ 120   1              while(!key1);
+ 121   1      }
+ 122          
+ 123          void start(void)
+ 124          {
+ 125   1              scl = 1;
+ 126   1              sda = 1;
+ 127   1              delay4us();
+ 128   1              sda = 0;
+ 129   1              delay4us();
+ 130   1              scl = 0;
+ 131   1      }
+ 132          
+ 133          void stop(void)
+ 134          {
+ 135   1              scl = 0;
+ 136   1              sda = 0;
+ 137   1              delay4us();
+ 138   1              scl = 1;
+ 139   1              delay4us();
+ 140   1              sda = 1;
+ 141   1              delay4us();
+ 142   1              sda = 0;
+ 143   1      }
+ 144          
+ 145          bit rack(void)
+ 146          {
+ 147   1              bit flag;
+ 148   1              scl = 1;
+ 149   1              delay4us();
+ 150   1              flag = sda;
+ 151   1              scl = 0;
+ 152   1              return(flag);
+ 153   1      }
+ 154          
+ 155          void sack(void)
+ 156          {
+ 157   1              sda = 0;
+ 158   1              delay4us();
+ 159   1              scl = 1;
+ 160   1              delay4us();
+ 161   1              scl = 0;
+ 162   1              delay4us();
+ 163   1              sda = 1;
+ 164   1              delay4us();
+ 165   1      }
+ 166          
+ 167          void ackn(void)
+ 168          {
+ 169   1              sda = 1;
+ 170   1              delay4us();
+ 171   1              scl = 1;
+ 172   1              delay4us();
+ 173   1              scl = 0;
+ 174   1              delay4us();
+ 175   1              sda = 0;
+ 176   1      }
+ 177          
+ 178          uchar rec_byte(void)
+ 179          {
+C51 COMPILER V9.01   A                                                                     12/10/2021 18:13:50 PAGE 4   
+
+ 180   1              uchar i, temp;
+ 181   1              for(i=0; i<8; i++)
+ 182   1              {
+ 183   2                      temp <<= 1;
+ 184   2                      scl = 1;
+ 185   2                      delay4us();
+ 186   2                      temp |= sda;
+ 187   2                      scl = 0;
+ 188   2                      delay4us();
+ 189   2              }
+ 190   1              return(temp);
+ 191   1      }
+ 192          
+ 193          void send_byte(uchar temp)
+ 194          {
+ 195   1              uchar i;
+ 196   1              scl = 0;
+ 197   1              for(i=0; i<8; i++)
+ 198   1              {
+ 199   2                      sda = (bit)(temp&0x80);
+ 200   2                      scl = 1;
+ 201   2                      delay4us();
+ 202   2                      scl = 0;
+ 203   2                      temp <<= 1;
+ 204   2              }               
+ 205   1              sda = 1;
+ 206   1      }
+ 207          
+ 208          void show(void)
+ 209          {
+ 210   1          uchar i=0;
+ 211   1              uchar dat[8];//= {2,1, 1,2, 1,0, 9,0};
+ 212   1              for(i=0; i<4; i++)
+ 213   1              {
+ 214   2                  dat[i*2+1] = rec_mem[i]%10;
+ 215   2                      dat[i*2] = rec_mem[i]/10;
+ 216   2              }
+ 217   1      
+ 218   1              smg_display(dat, 1);
+ 219   1      }
+ 220          
+ 221          void smg_display(uchar dat[], uchar pos)
+ 222          {
+ 223   1              uchar i=0;
+ 224   1              uchar pos_temp=pos-1;
+ 225   1              uint k=0;
+ 226   1              //out = 0xc3;
+ 227   1              for(i=pos_temp;i<8;i++)
+ 228   1              {
+ 229   2                      switch(i)//位选
+ 230   2                      {
+ 231   3                              case 0: LSC=1;LSB=1;LSA=1;break;
+ 232   3                              case 1: LSC=1;LSB=1;LSA=0;break;
+ 233   3                              case 2: LSC=1;LSB=0;LSA=1;break;
+ 234   3                              case 3: LSC=1;LSB=0;LSA=0;break;
+ 235   3                              case 4: LSC=0;LSB=1;LSA=1;break;
+ 236   3                              case 5: LSC=0;LSB=1;LSA=0;break;
+ 237   3                              case 6: LSC=0;LSB=0;LSA=1;break;
+ 238   3                              case 7: LSC=0;LSB=0;LSA=0;break;
+ 239   3                      }
+ 240   2                      SMG_PORT=gsmg_code[dat[i-pos_temp]];//传送段选数据
+ 241   2                      for(k=0; k<250; k++)
+C51 COMPILER V9.01   A                                                                     12/10/2021 18:13:50 PAGE 5   
+
+ 242   2                      {
+ 243   3                          //delsy4us();
+ 244   3                      }
+ 245   2                      SMG_PORT=0x00;//消音
+ 246   2              }
+ 247   1      }
+ 248          void delay4us(void)
+ 249          {
+ 250   1              _nop_();_nop_();_nop_();_nop_();
+ 251   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    684    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     17      19
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       3
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
