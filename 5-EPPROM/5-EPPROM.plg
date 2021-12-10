@@ -1,0 +1,118 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\学习\微机接口\5-EPPROM\5-EPPROM.uvproj
+Project File Date:  12/10/2021
+
+<h2>Output:</h2>
+compiling a.c...
+a.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_BYTE?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?RACK?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?SHOW?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SMG_DISPLAY?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+Program Size: data=63.4 xdata=0 code=910
+creating hex file from "5-EPPROM"...
+"5-EPPROM" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_BYTE?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?RACK?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?SHOW?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SMG_DISPLAY?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+Program Size: data=63.4 xdata=0 code=910
+creating hex file from "5-EPPROM"...
+"5-EPPROM" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling a.c...
+linking...
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_BYTE?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?RACK?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?SHOW?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SMG_DISPLAY?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+Program Size: data=63.4 xdata=0 code=910
+creating hex file from "5-EPPROM"...
+"5-EPPROM" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_BYTE?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?RACK?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?SHOW?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SMG_DISPLAY?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+Program Size: data=63.4 xdata=0 code=910
+creating hex file from "5-EPPROM"...
+"5-EPPROM" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling a.c...
+linking...
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_BYTE?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?RACK?A
+    CALLER1: ?PR?EXT0?A
+    CALLER2: ?PR?EXT1?A
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?SHOW?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SMG_DISPLAY?A
+    CALLER1: ?PR?EXT1?A
+    CALLER2: ?C_C51STARTUP
+Program Size: data=63.4 xdata=0 code=910
+creating hex file from "5-EPPROM"...
+"5-EPPROM" - 0 Error(s), 4 Warning(s).
